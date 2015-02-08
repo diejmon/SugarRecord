@@ -117,14 +117,22 @@ public class SugarRecordCDContext: SugarRecordContext
             fetchRequest.fetchLimit = 1
         case .last:
             if !sortDescriptors.isEmpty{
-                sortDescriptors[0] = NSSortDescriptor(key: sortDescriptors.first!.key!, ascending: !(sortDescriptors.first!.ascending))
+              sortDescriptors[0] = NSSortDescriptor(key: "key", ascending: true)
+              let sortDescriptor: NSSortDescriptor = first(sortDescriptors)!
+              let sortDescriptorKey = sortDescriptor.getKey()
+              let ascending: Bool = sortDescriptor.ascending
+              sortDescriptors[0] = NSSortDescriptor(key: sortDescriptorKey!, ascending: ascending)
              }
             fetchRequest.fetchLimit = 1
         case .firsts(let number):
             fetchRequest.fetchLimit = number
         case .lasts(let number):
             if !sortDescriptors.isEmpty{
-                sortDescriptors[0] = NSSortDescriptor(key: sortDescriptors.first!.key!, ascending: !(sortDescriptors.first!.ascending))
+              let sortDescriptor: NSSortDescriptor = first(sortDescriptors)!
+              let sortDescriptorKey = sortDescriptor.getKey()
+              let ascending: Bool = sortDescriptor.ascending
+              
+                sortDescriptors[0] = NSSortDescriptor(key: sortDescriptorKey!, ascending: ascending)
             }
             fetchRequest.fetchLimit = number
         case .all:
