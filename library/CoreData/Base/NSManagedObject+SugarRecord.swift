@@ -164,7 +164,15 @@ extension NSManagedObject
         finder.stackType = stackType()
         return finder
     }
-    
+  
+  public class func first() ->SugarRecordFinder
+  {
+    var finder: SugarRecordFinder = SugarRecordFinder()
+    finder.first()
+    finder.objectClass = self
+    finder.stackType = stackType()
+    return finder
+  }
 
     //MARK: - Count
     
