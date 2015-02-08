@@ -302,3 +302,13 @@ extension NSManagedObject
         self.context().cancelWriting()
     }
 }
+
+public func createManagedObject<T: NSManagedObject>() -> T
+{
+  SugarRecordLogger.logLevelVerbose.log("Object created")
+  var object: T?
+  SugarRecord.operation(NSManagedObject.stackType(), closure: { (context) -> () in
+    object = context.createObject(T.self) as T?
+  })
+  return object!
+}
