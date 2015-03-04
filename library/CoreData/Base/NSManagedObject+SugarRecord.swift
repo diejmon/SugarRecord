@@ -73,7 +73,7 @@ extension NSManagedObject
     public class func by(predicateString: NSString) -> SugarRecordFinder
     {
         var finder: SugarRecordFinder = SugarRecordFinder()
-        finder.setPredicate(predicateString)
+        finder.setPredicate(predicateString as String)
         finder.objectClass = self
         finder.stackType = stackType()
         return finder
@@ -308,7 +308,7 @@ public func createManagedObject<T: NSManagedObject>() -> T
   SugarRecordLogger.logLevelVerbose.log("Object created")
   var object: T?
   SugarRecord.operation(NSManagedObject.stackType(), closure: { (context) -> () in
-    object = context.createObject(T.self) as T?
+    object = context.createObject(T.self) as! T?
   })
   return object!
 }

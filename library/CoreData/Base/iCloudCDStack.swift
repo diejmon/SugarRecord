@@ -17,9 +17,9 @@ public struct iCloudData
     /// Is the full AppID (including the Team Prefix). It's needed to change tihs to match the Team Prefix found in the iOS Provisioning profile
     internal let iCloudAppID: String
     /// Is the name of the directory where the database will be stored in. It should always end with .nosync
-    internal let iCloudDataDirectoryName: String = "Data.nosync"
+  internal let iCloudDataDirectoryName: String// = "Data.nosync"
     /// Is the name of the directory where the database change logs will be stored in
-    internal let iCloudLogsDirectory: String = "Logs"
+  internal let iCloudLogsDirectory: String// = "Logs"
     
     /**
     Note:
@@ -39,8 +39,19 @@ public struct iCloudData
     public init (iCloudAppID: String, iCloudDataDirectoryName: String?, iCloudLogsDirectory: String?)
     {
         self.iCloudAppID = iCloudAppID
-        if (iCloudDataDirectoryName != nil) {self.iCloudDataDirectoryName = iCloudDataDirectoryName!}
-        if (iCloudLogsDirectory != nil) {self.iCloudLogsDirectory = iCloudLogsDirectory!}
+      if (iCloudDataDirectoryName != nil) {
+        self.iCloudDataDirectoryName = iCloudDataDirectoryName!
+      }
+      else {
+        self.iCloudDataDirectoryName = "Data.nosync"
+      }
+      
+      if (iCloudLogsDirectory != nil) {
+        self.iCloudLogsDirectory = iCloudLogsDirectory!
+      }
+      else {
+        self.iCloudLogsDirectory = "Logs"
+      }
     }
 }
 
@@ -69,8 +80,8 @@ public class iCloudCDStack: DefaultCDStack
     */
     public init(databaseURL: NSURL, model: NSManagedObjectModel?, automigrating: Bool, icloudData: iCloudData)
     {
+      self.icloudData = icloudData
         super.init(databaseURL: databaseURL, model: model, automigrating: automigrating)
-        self.icloudData = icloudData
         self.automigrating = automigrating
         self.databasePath = databaseURL
         self.managedObjectModel = model
@@ -154,7 +165,7 @@ public class iCloudCDStack: DefaultCDStack
         SugarRecordLogger.logLevelInfo.log("Initializing the stack: \(self.stackDescription)")
         createManagedObjecModelIfNeeded()
         persistentStoreCoordinator = createPersistentStoreCoordinator()
-        addDatabase(foriCloud: true, self.dataBaseAddedClosure())
+        addDatabase(foriCloud: true, completionClosure: self.dataBaseAddedClosure())
     }
     
     /**

@@ -64,7 +64,7 @@ public class SugarRecordCDContext: SugarRecordContext
     */
     public func createObject(objectClass: AnyClass) -> AnyObject?
     {
-        let managedObjectClass: NSManagedObject.Type = objectClass as NSManagedObject.Type
+        let managedObjectClass: NSManagedObject.Type = objectClass as! NSManagedObject.Type
         var object: AnyObject = NSEntityDescription.insertNewObjectForEntityForName(managedObjectClass.modelName(), inManagedObjectContext: self.contextCD)
         return object
     }
@@ -76,7 +76,7 @@ public class SugarRecordCDContext: SugarRecordContext
     */
     public func insertObject(object: AnyObject)
     {
-        moveObject(object as NSManagedObject, inContext: self.contextCD)
+        moveObject(object as! NSManagedObject, inContext: self.contextCD)
     }
     
     /**
@@ -108,7 +108,7 @@ public class SugarRecordCDContext: SugarRecordContext
     public class func fetchRequest(fromFinder finder: SugarRecordFinder) -> NSFetchRequest
     {
         let objectClass: NSObject.Type = finder.objectClass!
-        let managedObjectClass: NSManagedObject.Type = objectClass as NSManagedObject.Type
+        let managedObjectClass: NSManagedObject.Type = objectClass as! NSManagedObject.Type
         let fetchRequest: NSFetchRequest = NSFetchRequest(entityName: managedObjectClass.modelName())
         fetchRequest.predicate = finder.predicate
         var sortDescriptors: [NSSortDescriptor] = finder.sortDescriptors
@@ -121,7 +121,7 @@ public class SugarRecordCDContext: SugarRecordContext
               let sortDescriptor: NSSortDescriptor = first(sortDescriptors)!
               let sortDescriptorKey = sortDescriptor.getKey()
               let ascending: Bool = sortDescriptor.ascending
-              sortDescriptors[0] = NSSortDescriptor(key: sortDescriptorKey!, ascending: ascending)
+              sortDescriptors[0] = NSSortDescriptor(key: sortDescriptorKey! as String, ascending: ascending)
              }
             fetchRequest.fetchLimit = 1
         case .firsts(let number):
@@ -132,7 +132,7 @@ public class SugarRecordCDContext: SugarRecordContext
               let sortDescriptorKey = sortDescriptor.getKey()
               let ascending: Bool = sortDescriptor.ascending
               
-                sortDescriptors[0] = NSSortDescriptor(key: sortDescriptorKey!, ascending: ascending)
+                sortDescriptors[0] = NSSortDescriptor(key: sortDescriptorKey! as String, ascending: ascending)
             }
             fetchRequest.fetchLimit = number
         case .all:
@@ -187,7 +187,7 @@ public class SugarRecordCDContext: SugarRecordContext
     */
     public func count(objectClass: AnyClass, predicate: NSPredicate? = nil) -> Int
     {
-        let managedObjectClass: NSManagedObject.Type = objectClass as NSManagedObject.Type
+        let managedObjectClass: NSManagedObject.Type = objectClass as! NSManagedObject.Type
         let fetchRequest: NSFetchRequest = NSFetchRequest(entityName: managedObjectClass.modelName())
         fetchRequest.predicate = predicate
         var error: NSError?
@@ -209,7 +209,7 @@ public class SugarRecordCDContext: SugarRecordContext
     func moveObject(object: NSManagedObject, inContext context: NSManagedObjectContext) -> NSManagedObject?
     {
         var error: NSError?
-        let objectInContext: NSManagedObject? = context.existingObjectWithID(object.objectID, error: &error)?
+        let objectInContext: NSManagedObject? = context.existingObjectWithID(object.objectID, error: &error)
         if error != nil {
             let exception: NSException = NSException(name: "Database operations", reason: "Couldn't move the object into the new context", userInfo: nil)
             SugarRecord.handle(exception)
