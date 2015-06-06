@@ -312,3 +312,11 @@ public func createManagedObject<T: NSManagedObject>() -> T
   })
   return object!
 }
+
+public func findFirstBy<T: NSManagedObject, KeyT: StringLiteralConvertible, ValueT: StringLiteralConvertible>(key: KeyT, value: ValueT) -> T?
+{
+  SugarRecordLogger.logLevelVerbose.log("Find object")
+  var object: T? = T.self.first().by(key, equalTo: value).find().firstObject() as? T
+  
+  return object
+}
